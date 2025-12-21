@@ -6,4 +6,5 @@ export enum SQLCommandStatementType {
 export enum SQLStatementeStatus {
   PREPARE_SUCCESS,
   PREPARE_UNRECOGNIZED_STATEMENT,
+  PREPARE_SYNTAX_ERROR,
 }

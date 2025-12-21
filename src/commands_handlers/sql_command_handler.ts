@@ -1,6 +1,7 @@
 import { SQLStatementeStatus, SQLCommandStatementType } from '../enum/sql_command_statemente.enum';
 import type { InputBuffer } from '../types/input_buffer';
 import type { SQLStatement } from '../types/sql_statemente';
+import { sscanf } from '../utils/string_utils';
 
 export class SQLCommandHandler {
   constructor() {}
@@ -10,6 +11,19 @@ export class SQLCommandHandler {
 
     if (input.startsWith('insert')) {
       statement.type = SQLCommandStatementType.STATEMENT_INSERT;
+
+      const args = sscanf(input, /^insert (\d+) (\S+) (\S+)/);
+
+      if (!args || args.length < 3) {
+        return SQLStatementeStatus.PREPARE_SYNTAX_ERROR;
+      }
+
+      statement.row_to_insert = {
+        id: Number(args[1]),
+        username: args[2],
+        email: args[3],
+      };
+
       return SQLStatementeStatus.PREPARE_SUCCESS;
     }
 
