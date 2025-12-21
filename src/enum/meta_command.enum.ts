@@ -1,4 +1,4 @@
-export enum MetaCommand {
+export enum MetaCommandResult {
   META_COMMAND_SUCCESS,
   META_COMMAND_UNRECOGNIZED,
 }
