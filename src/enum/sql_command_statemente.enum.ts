@@ -1,0 +1,9 @@
+export enum SQLCommandStatementType {
+  STATEMENT_INSERT,
+  STATEMENT_SELECT,
+}
+
+export enum SQLStatementeStatus {
+  PREPARE_SUCCESS,
+  PREPARE_UNRECOGNIZED_STATEMENT,
+}
