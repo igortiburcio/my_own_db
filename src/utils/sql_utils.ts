@@ -23,3 +23,7 @@ export function size_of_attributes<T extends Record<string, unknown>>(
 
   return sizes;
 }
+
+export function serialize_row<T extends Record<string, unknown>>(row: T): string {
+  return JSON.stringify(row);
+}
