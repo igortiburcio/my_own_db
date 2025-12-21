@@ -1,0 +1,4 @@
+export enum MetaCommand {
+  META_COMMAND_SUCCESS,
+  META_COMMAND_UNRECOGNIZED,
+}
