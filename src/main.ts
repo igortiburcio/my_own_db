@@ -4,13 +4,8 @@ import { MetacommandHandler } from './commands_handlers/metacommand_handler';
 import { MetaCommandResult } from './enum/meta_command.enum';
 import { SQLCommandHandler } from './commands_handlers/sql_command_handler';
 import { SQLStatement } from './types/sql_statemente';
+import type { UserRow } from './types/hard_coded_tables/user_table';
 import { SQLStatementeStatus } from './enum/sql_command_statemente.enum';
-
-type UserTable = {
-  id: number;
-  username: string;
-  email: string;
-};
 
 async function main() {
   const input_buffer = new InputBuffer();
@@ -35,7 +30,7 @@ async function main() {
       }
     }
 
-    const statement = new SQLStatement();
+    const statement = new SQLStatement<UserRow>();
     const prepare_status = sql_command_handler.prepare_statement(input_buffer, statement);
 
     switch (prepare_status) {

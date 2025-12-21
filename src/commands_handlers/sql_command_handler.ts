@@ -6,7 +6,10 @@ import { sscanf } from '../utils/string_utils';
 export class SQLCommandHandler {
   constructor() {}
 
-  prepare_statement(input_buffer: InputBuffer, statement: SQLStatement): SQLStatementeStatus {
+  prepare_statement<T extends Record<string, unknown>>(
+    input_buffer: InputBuffer,
+    statement: SQLStatement<T>
+  ): SQLStatementeStatus {
     const input = input_buffer.buffer;
 
     if (input.startsWith('insert')) {
@@ -18,11 +21,10 @@ export class SQLCommandHandler {
         return SQLStatementeStatus.PREPARE_SYNTAX_ERROR;
       }
 
-      statement.row_to_insert = {
-        id: Number(args[1]),
-        username: args[2],
-        email: args[3],
-      };
+      for (const arg in args) {
+        // @ts-ignore
+        statement.row_to_insert![arg] = args[arg];
+      }
 
       return SQLStatementeStatus.PREPARE_SUCCESS;
     }
@@ -35,7 +37,7 @@ export class SQLCommandHandler {
     return SQLStatementeStatus.PREPARE_UNRECOGNIZED_STATEMENT;
   }
 
-  execute_statement(statement: SQLStatement): void {
+  execute_statement<T extends Record<string, unknown>>(statement: SQLStatement<T>): void {
     switch (statement.type) {
       case SQLCommandStatementType.STATEMENT_INSERT:
         console.log('This is where we would do an insert.\n');
