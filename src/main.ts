@@ -6,11 +6,15 @@ import { SQLCommandHandler } from './commands_handlers/sql_command_handler';
 import { SQLStatement } from './types/sql_statement';
 import type { UserRow } from './types/hard_coded_tables/user_table';
 import { SQLStatementStatus } from './enum/sql_command_statement.enum';
+import { SQLParser } from './engine/sql_parser';
+import { SQLExecutor } from './engine/sql_executor';
 
 async function main() {
   const input_buffer = new InputBuffer();
   const metacommand_handler = new MetacommandHandler();
-  const sql_command_handler = new SQLCommandHandler();
+  const sqlParser = new SQLParser();
+  const sqlExecutor = new SQLExecutor();
+  const sql_command_handler = new SQLCommandHandler(sqlParser, sqlExecutor);
 
   while (true) {
     await read_input(input_buffer);
