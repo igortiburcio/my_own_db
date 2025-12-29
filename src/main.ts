@@ -2,7 +2,7 @@ import { InputBuffer } from './types/input_buffer';
 import { read_input } from './utils/terminal_utils';
 import { MetacommandHandler } from './commands_handlers/metacommand_handler';
 import { MetaCommandResult } from './enum/meta_command.enum';
-import { SQLCommandHandler } from './commands_handlers/sql_command_handler';
+import { QueryRunner } from './engine/query_runner';
 import { SQLStatement } from './types/sql_statement';
 import type { UserRow } from './types/hard_coded_tables/user_table';
 import { SQLStatementStatus } from './enum/sql_command_statement.enum';
@@ -12,9 +12,9 @@ import { SQLExecutor } from './engine/sql_executor';
 async function main() {
   const input_buffer = new InputBuffer();
   const metacommand_handler = new MetacommandHandler();
-  const sqlParser = new SQLParser();
-  const sqlExecutor = new SQLExecutor();
-  const sql_command_handler = new SQLCommandHandler(sqlParser, sqlExecutor);
+  const sql_parser = new SQLParser();
+  const sql_executor = new SQLExecutor();
+  const query_runner = new QueryRunner(sql_parser, sql_executor);
 
   while (true) {
     await read_input(input_buffer);
@@ -35,7 +35,7 @@ async function main() {
     }
 
     const statement = new SQLStatement<UserRow>();
-    const prepare_status = sql_command_handler.prepare_statement(input_buffer, statement);
+    const prepare_status = query_runner.prepare_statement(input_buffer, statement);
 
     switch (prepare_status) {
       case SQLStatementStatus.PREPARE_SUCCESS: {
@@ -48,7 +48,7 @@ async function main() {
       }
     }
 
-    sql_command_handler.execute_statement(statement);
+    query_runner.execute_statement(statement);
     console.log('EXECUTED');
   }
 }

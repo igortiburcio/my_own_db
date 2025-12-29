@@ -1,10 +1,10 @@
-import { SQLStatementStatus, SQLCommandStatementType } from '../enum/sql_command_statement.enum';
+import { SQLStatementStatus } from '../enum/sql_command_statement.enum';
 import type { InputBuffer } from '../types/input_buffer';
 import type { SQLStatement } from '../types/sql_statement';
-import { SQLParser } from '../engine/sql_parser';
-import { SQLExecutor } from '../engine/sql_executor';
+import { SQLParser } from './sql_parser';
+import { SQLExecutor } from './sql_executor';
 
-export class SQLCommandHandler {
+export class QueryRunner {
   constructor(
     private sqlParser: SQLParser,
     private sqlExecutor: SQLExecutor
