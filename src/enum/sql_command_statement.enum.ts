@@ -3,7 +3,7 @@ export enum SQLCommandStatementType {
   STATEMENT_SELECT,
 }
 
-export enum SQLStatementeStatus {
+export enum SQLStatementStatus {
   PREPARE_SUCCESS,
   PREPARE_UNRECOGNIZED_STATEMENT,
   PREPARE_SYNTAX_ERROR,

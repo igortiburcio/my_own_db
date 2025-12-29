@@ -6,12 +6,12 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-export function read_input(inputBuffer: InputBuffer): Promise<void> {
+export function read_input(input_buffer: InputBuffer): Promise<void> {
   return new Promise(resolve => {
     rl.question('db > ', line => {
-      inputBuffer.buffer = line;
-      inputBuffer.input_length = Array.from(line).length;
-      inputBuffer.buffer_length = Buffer.byteLength(line, 'utf8');
+      input_buffer.buffer = line;
+      input_buffer.input_length = Array.from(line).length;
+      input_buffer.buffer_length = Buffer.byteLength(line, 'utf8');
       resolve();
     });
   });

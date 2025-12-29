@@ -1,15 +1,13 @@
-import { SQLStatementeStatus, SQLCommandStatementType } from '../enum/sql_command_statemente.enum';
+import { SQLStatementStatus, SQLCommandStatementType } from '../enum/sql_command_statement.enum';
 import type { InputBuffer } from '../types/input_buffer';
-import type { SQLStatement } from '../types/sql_statemente';
+import type { SQLStatement } from '../types/sql_statement';
 import { sscanf } from '../utils/string_utils';
 
 export class SQLCommandHandler {
-  constructor() {}
-
   prepare_statement<T extends Record<string, unknown>>(
     input_buffer: InputBuffer,
     statement: SQLStatement<T>
-  ): SQLStatementeStatus {
+  ): SQLStatementStatus {
     const input = input_buffer.buffer;
 
     if (input.startsWith('insert')) {
@@ -18,10 +16,10 @@ export class SQLCommandHandler {
 
     if (input.startsWith('select')) {
       statement.type = SQLCommandStatementType.STATEMENT_SELECT;
-      return SQLStatementeStatus.PREPARE_SUCCESS;
+      return SQLStatementStatus.PREPARE_SUCCESS;
     }
 
-    return SQLStatementeStatus.PREPARE_UNRECOGNIZED_STATEMENT;
+    return SQLStatementStatus.PREPARE_UNRECOGNIZED_STATEMENT;
   }
 
   execute_statement<T extends Record<string, unknown>>(statement: SQLStatement<T>): void {
@@ -38,13 +36,13 @@ export class SQLCommandHandler {
   private prepare_insert(
     input: string,
     statement: SQLStatement<Record<string, unknown>>
-  ): SQLStatementeStatus {
+  ): SQLStatementStatus {
     statement.type = SQLCommandStatementType.STATEMENT_INSERT;
 
     const args = sscanf(input, /^insert (\d+) (\S+) (\S+)/);
 
     if (!args || args.length < 3) {
-      return SQLStatementeStatus.PREPARE_SYNTAX_ERROR;
+      return SQLStatementStatus.PREPARE_SYNTAX_ERROR;
     }
 
     for (const arg in args) {
@@ -52,6 +50,6 @@ export class SQLCommandHandler {
       statement.row_to_insert![arg] = args[arg];
     }
 
-    return SQLStatementeStatus.PREPARE_SUCCESS;
+    return SQLStatementStatus.PREPARE_SUCCESS;
   }
 }
