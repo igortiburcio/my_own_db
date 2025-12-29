@@ -13,20 +13,7 @@ export class SQLCommandHandler {
     const input = input_buffer.buffer;
 
     if (input.startsWith('insert')) {
-      statement.type = SQLCommandStatementType.STATEMENT_INSERT;
-
-      const args = sscanf(input, /^insert (\d+) (\S+) (\S+)/);
-
-      if (!args || args.length < 3) {
-        return SQLStatementeStatus.PREPARE_SYNTAX_ERROR;
-      }
-
-      for (const arg in args) {
-        // @ts-ignore
-        statement.row_to_insert![arg] = args[arg];
-      }
-
-      return SQLStatementeStatus.PREPARE_SUCCESS;
+      return this.prepare_insert(input, statement);
     }
 
     if (input.startsWith('select')) {
@@ -46,5 +33,25 @@ export class SQLCommandHandler {
         console.log('This is where we would do a select.\n');
         break;
     }
+  }
+
+  private prepare_insert(
+    input: string,
+    statement: SQLStatement<Record<string, unknown>>
+  ): SQLStatementeStatus {
+    statement.type = SQLCommandStatementType.STATEMENT_INSERT;
+
+    const args = sscanf(input, /^insert (\d+) (\S+) (\S+)/);
+
+    if (!args || args.length < 3) {
+      return SQLStatementeStatus.PREPARE_SYNTAX_ERROR;
+    }
+
+    for (const arg in args) {
+      // @ts-ignore
+      statement.row_to_insert![arg] = args[arg];
+    }
+
+    return SQLStatementeStatus.PREPARE_SUCCESS;
   }
 }
